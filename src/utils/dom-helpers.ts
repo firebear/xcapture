@@ -47,6 +47,18 @@ export function inlineStyles(element: HTMLElement): void {
     'gap',
     'width',
     'height',
+    'box-sizing',
+    'overflow',
+    'position',
+    'text-align',
+    'white-space',
+    'word-wrap',
+    'align-items',
+    'justify-content',
+    'flex-wrap',
+    'min-height',
+    'max-width',
+    'object-fit',
   ];
 
   properties.forEach((prop) => {
