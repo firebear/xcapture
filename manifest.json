@@ -1,15 +1,28 @@
 {
   "manifest_version": 3,
   "name": "XCapture - X.com Tweet Screenshot",
-  "version": "1.0.0",
+  "version": "1.0.0.3",
   "description": "Capture X.com tweets as images with original styling",
-  "permissions": ["activeTab", "clipboardWrite"],
-  "host_permissions": ["https://x.com/*", "https://twitter.com/*"],
+  "permissions": [
+    "activeTab",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "https://x.com/*",
+    "https://twitter.com/*"
+  ],
   "content_scripts": [
     {
-      "matches": ["https://x.com/*", "https://twitter.com/*"],
-      "js": ["dist/content.js"],
-      "css": ["dist/styles.css"],
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "dist/content.js"
+      ],
+      "css": [
+        "dist/styles.css"
+      ],
       "run_at": "document_idle"
     }
   ],
