@@ -23,7 +23,31 @@ export class ScreenshotCapture {
 
   private prepareClone(tweet: HTMLElement): HTMLElement {
     const clone = cloneElementWithStyles(tweet);
+    
+    this.removeUnwantedElements(clone);
+    this.adjustStyles(clone);
+    
     return clone;
+  }
+
+  private removeUnwantedElements(clone: HTMLElement): void {
+    const selectorsToRemove = [
+      '[role="group"]',
+      '[data-testid="caret"]',
+      'button',
+    ];
+
+    selectorsToRemove.forEach((selector) => {
+      clone.querySelectorAll(selector).forEach((el) => el.remove());
+    });
+  }
+
+  private adjustStyles(clone: HTMLElement): void {
+    clone.style.backgroundColor = 'white';
+    clone.style.padding = '20px';
+    clone.style.borderRadius = '12px';
+    clone.style.maxWidth = '600px';
+    clone.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
   }
 
   private createContainer(content: HTMLElement): HTMLElement {
