@@ -1,82 +1,126 @@
-# XCapture - X.com 推文截图工具
+# XCapture - X.com Tweet Screenshot Tool
 
-一个 Chrome 浏览器扩展，用于将 X.com (Twitter) 的推文转换为图片。
+A Chrome browser extension that converts X.com (Twitter) tweets into images.
 
-## 功能特性
+[中文文档](./README.zh-CN.md)
 
-- 📸 一键截图推文内容
-- 🎨 保持原始样式和布局
-- 🖼️ 支持多图网格布局
-- 📋 复制到剪贴板
-- 💾 下载到本地
-- 🎯 自动注入到推文操作栏
+## Features
 
-## 安装
+- 📸 One-click tweet screenshot
+- 🎨 Preserves original styling and layout
+- 🖼️ Supports multi-image grid layouts
+- 📋 Copy to clipboard
+- 💾 Download to local storage
+- 🎯 Auto-injects into tweet action bar
 
-### 开发模式
+## Installation
 
-1. 克隆仓库
+### Development Mode
+
+1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/firebear/xcapture.git
 cd xcapture
 ```
 
-2. 安装依赖
+2. Install dependencies
 ```bash
 npm install
 ```
 
-3. 构建扩展
+3. Build the extension
 ```bash
 npm run build
 ```
 
-4. 在 Chrome 中加载扩展
-   - 打开 `chrome://extensions/`
-   - 启用"开发者模式"
-   - 点击"加载已解压的扩展程序"
-   - 选择项目的根目录（包含 manifest.json 的目录）
+4. Load the extension in Chrome
+   - Open `chrome://extensions/`
+   - Enable "Developer mode"
+   - Click "Load unpacked"
+   - Select the project root directory (containing manifest.json)
 
-### 生产模式
+### Production Mode
 
-1. 构建生产版本
+1. Build for production
 ```bash
 npm run build
 ```
 
-2. 打包扩展
-   - 在 `chrome://extensions/` 页面点击"打包扩展程序"
-   - 选择项目根目录
+2. Pack the extension
+   - On `chrome://extensions/` page, click "Pack extension"
+   - Select the project root directory
 
-## 使用方法
+## Usage
 
-1. 访问 [x.com](https://x.com)
-2. 在任意推文的操作栏中找到截图按钮（相机图标）
-3. 点击按钮生成截图
-4. 在预览模态框中选择：
-   - 复制到剪贴板
-   - 下载到本地
+1. Visit [x.com](https://x.com)
+2. Find the screenshot button (camera icon) in any tweet's action bar
+3. Click the button to generate a screenshot
+4. In the preview modal, choose:
+   - Copy to clipboard
+   - Download to local storage
 
-## 技术栈
+## Tech Stack
 
 - TypeScript
 - Chrome Extension Manifest V3
 - html-to-image
 - Vite
 
-## 开发
+## Development
 
 ```bash
-# 开发模式（监听文件变化）
+# Development mode (watch for file changes)
 npm run dev
 
-# 构建
+# Build
 npm run build
 
-# 清理
+# Clean
 npm run clean
 ```
 
-## 许可证
+## How It Works
+
+1. **Tweet Detection**: Uses MutationObserver to detect tweets as they load
+2. **Button Injection**: Injects a screenshot button into each tweet's action bar
+3. **Screenshot Capture**: Captures the tweet DOM element using html-to-image library
+4. **Image Export**: Provides options to copy or download the generated image
+
+## Features in Detail
+
+### Multi-Image Support
+When a tweet contains multiple images, the extension preserves Twitter's native grid layout:
+- 2 images: Side-by-side layout
+- 3 images: 1 large + 2 small layout
+- 4 images: 2x2 grid
+
+### Styling Preservation
+- Maintains original fonts, colors, and spacing
+- Preserves author information and timestamps
+- Removes interactive elements (buttons, links) from the screenshot
+
+## Troubleshooting
+
+**Button not appearing?**
+- Refresh the x.com page
+- Make sure the extension is enabled in `chrome://extensions/`
+
+**Screenshot looks different from expected?**
+- Twitter may have updated their DOM structure
+- Try refreshing the page and taking a new screenshot
+
+**Copy to clipboard not working?**
+- Make sure you've granted clipboard permissions
+- Try the download option instead
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
 
 MIT
+
+## Author
+
+Created by [firebear](https://github.com/firebear)
