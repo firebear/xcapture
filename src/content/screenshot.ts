@@ -54,11 +54,13 @@ export class ScreenshotCapture {
     const container = document.createElement('div');
     container.style.cssText = `
       position: fixed;
-      top: -9999px;
-      left: -9999px;
+      top: 0;
+      left: 0;
       width: 600px;
       background: white;
       z-index: -9999;
+      opacity: 0;
+      pointer-events: none;
     `;
     container.appendChild(content);
     return container;
