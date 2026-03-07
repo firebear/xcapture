@@ -3,6 +3,7 @@ import { copyImageToClipboard, downloadImage, generateFilename } from '../utils/
 export class PreviewModal {
   private modal: HTMLElement | null = null;
   private shadowHost: HTMLElement | null = null;
+  private handleEscapeKey: ((e: KeyboardEvent) => void) | null = null;
 
   show(imageDataUrl: string): void {
     this.modal = this.createModal(imageDataUrl);
@@ -10,14 +11,68 @@ export class PreviewModal {
     const shadow = this.shadowHost.attachShadow({ mode: 'closed' });
     shadow.appendChild(this.modal);
     document.body.appendChild(this.shadowHost);
+    
+    this.handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        this.close();
+      }
+    };
+    document.addEventListener('keydown', this.handleEscapeKey);
   }
 
   close(): void {
+    if (this.handleEscapeKey) {
+      document.removeEventListener('keydown', this.handleEscapeKey);
+      this.handleEscapeKey = null;
+    }
     if (this.shadowHost && this.shadowHost.parentElement) {
       this.shadowHost.remove();
       this.modal = null;
       this.shadowHost = null;
     }
+  }
+
+  private showToast(message: string, type: 'success' | 'error' = 'success'): void {
+    if (!this.modal) return;
+    
+    const toast = document.createElement('div');
+    toast.className = `xcapture-toast xcapture-toast-${type}`;
+    toast.textContent = message;
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 10001;
+      animation: slideIn 0.3s ease-out;
+      background: ${type === 'success' ? '#10b981' : '#ef4444'};
+    `;
+    
+    const styleAnim = document.createElement('style');
+    styleAnim.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+    `;
+    
+    this.modal.appendChild(styleAnim);
+    this.modal.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.animation = 'slideIn 0.3s ease-out reverse';
+      setTimeout(() => toast.remove(), 300);
+    }, 2000);
   }
 
   private createModal(imageDataUrl: string): HTMLElement {
@@ -49,27 +104,23 @@ export class PreviewModal {
 
   private attachEventListeners(modal: HTMLElement, imageDataUrl: string): void {
     const closeBtn = modal.querySelector('.xcapture-close');
-    const overlay = modal.querySelector('.xcapture-overlay');
     const copyBtn = modal.querySelector('.xcapture-copy');
     const downloadBtn = modal.querySelector('.xcapture-download');
 
-    const handleClose = () => this.close();
-    closeBtn?.addEventListener('click', handleClose);
-    overlay?.addEventListener('click', handleClose);
+    closeBtn?.addEventListener('click', () => this.close());
 
     copyBtn?.addEventListener('click', async () => {
       const success = await copyImageToClipboard(imageDataUrl);
       if (success) {
-        alert('图片已复制到剪贴板！');
-        this.close();
+        this.showToast('✓ 图片已复制到剪贴板', 'success');
       } else {
-        alert('复制失败，请重试');
+        this.showToast('✗ 复制失败，请重试', 'error');
       }
     });
 
     downloadBtn?.addEventListener('click', () => {
       downloadImage(imageDataUrl, generateFilename());
-      this.close();
+      this.showToast('✓ 图片已开始下载', 'success');
     });
   }
 
