@@ -1,15 +1,21 @@
 import { toPng } from 'html-to-image';
-import { cloneElementWithStyles } from '../utils/dom-helpers';
 
 export class ScreenshotCapture {
   async capture(tweet: HTMLElement): Promise<string> {
-    const clone = this.prepareClone(tweet);
+    const wrapper = this.createWrapper(tweet);
+    const elementsToHide = this.findElementsToHide(tweet);
+    const originalStyles = this.hideElements(elementsToHide);
     
-    const container = this.createContainer(clone);
-    document.body.appendChild(container);
+    const parent = tweet.parentNode;
+    const nextSibling = tweet.nextSibling;
     
     try {
-      const dataUrl = await toPng(container, {
+      parent?.insertBefore(wrapper, nextSibling);
+      wrapper.appendChild(tweet);
+      
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      const dataUrl = await toPng(wrapper, {
         pixelRatio: 2,
         quality: 1.0,
         backgroundColor: '#ffffff',
@@ -17,52 +23,64 @@ export class ScreenshotCapture {
       
       return dataUrl;
     } finally {
-      document.body.removeChild(container);
+      parent?.insertBefore(tweet, wrapper);
+      wrapper.remove();
+      this.restoreElements(elementsToHide, originalStyles);
     }
   }
 
-  private prepareClone(tweet: HTMLElement): HTMLElement {
-    const clone = cloneElementWithStyles(tweet);
-    
-    this.removeUnwantedElements(clone);
-    this.adjustStyles(clone);
-    
-    return clone;
+  private createWrapper(tweet: HTMLElement): HTMLElement {
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = `
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 600px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+    `;
+    return wrapper;
   }
 
-  private removeUnwantedElements(clone: HTMLElement): void {
-    const selectorsToRemove = [
+  private findElementsToHide(tweet: HTMLElement): HTMLElement[] {
+    const selectorsToHide = [
       '[role="group"]',
       '[data-testid="caret"]',
       'button',
     ];
 
-    selectorsToRemove.forEach((selector) => {
-      clone.querySelectorAll(selector).forEach((el) => el.remove());
+    const elements: HTMLElement[] = [];
+    selectorsToHide.forEach((selector) => {
+      tweet.querySelectorAll(selector).forEach((el) => {
+        if (el instanceof HTMLElement) {
+          elements.push(el);
+        }
+      });
     });
+
+    return elements;
   }
 
-  private adjustStyles(clone: HTMLElement): void {
-    clone.style.backgroundColor = 'white';
-    clone.style.padding = '20px';
-    clone.style.borderRadius = '12px';
-    clone.style.maxWidth = '600px';
-    clone.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+  private hideElements(elements: HTMLElement[]): Map<HTMLElement, string> {
+    const originalStyles = new Map<HTMLElement, string>();
+    
+    elements.forEach((el) => {
+      originalStyles.set(el, el.style.display);
+      el.style.display = 'none';
+    });
+
+    return originalStyles;
   }
 
-  private createContainer(content: HTMLElement): HTMLElement {
-    const container = document.createElement('div');
-    container.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 600px;
-      background: white;
-      z-index: -9999;
-      opacity: 0;
-      pointer-events: none;
-    `;
-    container.appendChild(content);
-    return container;
+  private restoreElements(
+    elements: HTMLElement[],
+    originalStyles: Map<HTMLElement, string>
+  ): void {
+    elements.forEach((el) => {
+      const originalDisplay = originalStyles.get(el);
+      if (originalDisplay !== undefined) {
+        el.style.display = originalDisplay;
+      }
+    });
   }
 }
