@@ -2,21 +2,21 @@ import { copyImageToClipboard, downloadImage, generateFilename } from '../utils/
 
 export class PreviewModal {
   private modal: HTMLElement | null = null;
-  private shadow: ShadowRoot | null = null;
+  private shadowHost: HTMLElement | null = null;
 
   show(imageDataUrl: string): void {
     this.modal = this.createModal(imageDataUrl);
-    const shadowHost = document.createElement('div');
-    this.shadow = shadowHost.attachShadow({ mode: 'closed' });
-    this.shadow.appendChild(this.modal);
-    document.body.appendChild(shadowHost);
+    this.shadowHost = document.createElement('div');
+    const shadow = this.shadowHost.attachShadow({ mode: 'closed' });
+    shadow.appendChild(this.modal);
+    document.body.appendChild(this.shadowHost);
   }
 
   close(): void {
-    if (this.modal && this.modal.parentElement) {
-      this.modal.parentElement.remove();
+    if (this.shadowHost && this.shadowHost.parentElement) {
+      this.shadowHost.remove();
       this.modal = null;
-      this.shadow = null;
+      this.shadowHost = null;
     }
   }
 
