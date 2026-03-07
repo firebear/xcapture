@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "XCapture - X.com Tweet Screenshot",
-  "version": "1.0.0.19",
+  "version": "1.0.0.20",
   "description": "Capture X.com tweets as images with original styling",
   "permissions": [
     "activeTab",
