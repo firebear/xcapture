@@ -78,7 +78,7 @@ export class PreviewModal {
   private createModal(imageDataUrl: string): HTMLElement {
     const modal = document.createElement('div');
     modal.className = 'xcapture-modal';
-    
+
     modal.innerHTML = `
       <div class="xcapture-overlay"></div>
       <div class="xcapture-content">

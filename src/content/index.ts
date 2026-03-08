@@ -100,7 +100,7 @@ class XCapture {
     try {
       const imageDataUrl = await this.capture.capture(tweet);
       this.hideLoading(loading);
-      
+
       const modal = new PreviewModal();
       modal.show(imageDataUrl);
     } catch (error) {
