@@ -8,7 +8,7 @@
     "build": "vite build && npm run copy-files",
     "build:dev": "node scripts/bump-build.js && vite build && npm run copy-files",
     "bump:build": "node scripts/bump-build.js",
-    "copy-files": "cp manifest.json dist/ && cp -r assets dist/",
+    "copy-files": "cp -r assets dist/",
     "clean": "rm -rf dist"
   },
   "keywords": [],
