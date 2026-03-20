@@ -37,18 +37,17 @@ npm run build
    - Open `chrome://extensions/`
    - Enable "Developer mode"
    - Click "Load unpacked"
-   - Select the project root directory (containing manifest.json)
+   - Select the `dist/` directory
 
 ### Production Mode
 
 1. Build for production
 ```bash
-npm run build
+npm run package:store
 ```
 
 2. Pack the extension
-   - On `chrome://extensions/` page, click "Pack extension"
-   - Select the project root directory
+   - Upload the generated `xcapture-v1.0.2.zip` to Chrome Web Store
 
 ## Usage
 
@@ -74,6 +73,9 @@ npm run dev
 
 # Build
 npm run build
+
+# Create Chrome Web Store zip
+npm run package:store
 
 # Clean
 npm run clean

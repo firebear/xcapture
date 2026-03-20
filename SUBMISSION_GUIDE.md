@@ -42,8 +42,8 @@
 1. **Click "Add new item"**
 
 2. **Upload ZIP file**
-   - File: `xcapture-v1.0.0.zip`
-   - Location: Project root directory
+   - File: `xcapture-v1.0.2.zip`
+   - Generate it with `npm run package:store`
    - Size: ~24KB
 
 3. **Wait for processing**
@@ -200,9 +200,9 @@ Answer questionnaire:
 ### Common Issues
 
 **"Missing required files"**
-- Ensure manifest.json is in root
-- Check all icon files exist
-- Verify dist/ directory is complete
+- Ensure the uploaded ZIP expands with `manifest.json` at the ZIP root
+- Check all icon files exist in `assets/`
+- Run `npm run validate:release` before uploading
 
 **"Invalid version number"**
 - Use format: major.minor.patch (e.g., 1.0.0)

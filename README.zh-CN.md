@@ -35,18 +35,17 @@ npm run build
    - 打开 `chrome://extensions/`
    - 启用"开发者模式"
    - 点击"加载已解压的扩展程序"
-   - 选择项目的根目录（包含 manifest.json 的目录）
+   - 选择 `dist/` 目录
 
 ### 生产模式
 
 1. 构建生产版本
 ```bash
-npm run build
+npm run package:store
 ```
 
 2. 打包扩展
-   - 在 `chrome://extensions/` 页面点击"打包扩展程序"
-   - 选择项目根目录
+   - 上传生成的 `xcapture-v1.0.2.zip` 到 Chrome 应用商店
 
 ## 使用方法
 
@@ -72,6 +71,9 @@ npm run dev
 
 # 构建
 npm run build
+
+# 生成 Chrome 应用商店 zip
+npm run package:store
 
 # 清理
 npm run clean
