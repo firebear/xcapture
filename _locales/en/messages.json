@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "XCapture - X.com Tweet Screenshot",
+    "description": "Extension name shown in Chrome Web Store and browser"
+  },
+  "extDescription": {
+    "message": "Capture X.com tweets as images with one click. Preserve styling, copy or download. Free, no ads, privacy-focused.",
+    "description": "Extension description shown in Chrome Web Store"
+  }
+}

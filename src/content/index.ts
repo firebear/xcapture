@@ -2,6 +2,7 @@ import { TweetDetector } from './tweet-detector';
 import { ButtonInjector } from './button-injector';
 import { ScreenshotCapture } from './screenshot';
 import { PreviewModal } from '../ui/preview-modal';
+import { t } from '../i18n';
 
 class XCapture {
   private detector: TweetDetector;
@@ -32,7 +33,7 @@ class XCapture {
     loading.innerHTML = `
       <div class="xcapture-loading-content">
         <div class="xcapture-spinner"></div>
-        <div class="xcapture-loading-text">正在生成截图...</div>
+        <div class="xcapture-loading-text">${t('loading.generating')}</div>
       </div>
     `;
     
@@ -106,7 +107,7 @@ class XCapture {
     } catch (error) {
       this.hideLoading(loading);
       console.error('Failed to capture screenshot:', error);
-      alert('截图失败，请重试');
+      alert(t('loading.failed'));
     }
   }
 }

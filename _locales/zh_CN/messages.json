@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "XCapture - X.com 推文截图",
+    "description": "Extension name shown in Chrome Web Store and browser"
+  },
+  "extDescription": {
+    "message": "一键将 X.com 推文截图保存为图片。保持原样式，可复制或下载。免费、无广告、隐私优先。",
+    "description": "Extension description shown in Chrome Web Store"
+  }
+}

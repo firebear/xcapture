@@ -5,6 +5,18 @@ All notable changes to XCapture will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0/).
 
+## [1.0.3] - 2026-04-05
+
+### Added
+- Long image splitting: automatically split long screenshots into pages at 16:9 ratio (optimized for screen viewing)
+- Watermark: each split image gets a "captured by XCapture Chrome extension" watermark in the bottom-right corner
+- Download all: one-click download of all split images
+- Internationalization (i18n): auto-detect browser language (Chinese for zh, English for others), with manual language toggle in the preview modal
+- Split image copy buttons now show page numbers (e.g., "Copy 1/3")
+
+### Changed
+- Split ratio changed from A4 (1.414) to 16:9 (1.778) for better on-screen readability
+
 ## [1.0.0] - 2026-03-08
 
 ### Added

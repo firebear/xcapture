@@ -10,6 +10,8 @@ const sourceManifestPath = path.join(rootDir, 'manifest.json');
 const distManifestPath = path.join(distDir, 'manifest.json');
 const sourceAssetsDir = path.join(rootDir, 'assets');
 const distAssetsDir = path.join(distDir, 'assets');
+const sourceLocalesDir = path.join(rootDir, '_locales');
+const distLocalesDir = path.join(distDir, '_locales');
 
 if (!fs.existsSync(distDir)) {
   throw new Error('dist directory does not exist. Run vite build first.');
@@ -22,4 +24,7 @@ fs.writeFileSync(distManifestPath, JSON.stringify(distManifest, null, 2) + '\n')
 fs.rmSync(distAssetsDir, { recursive: true, force: true });
 fs.cpSync(sourceAssetsDir, distAssetsDir, { recursive: true });
 
-console.log('Prepared dist release manifest and assets.');
+fs.rmSync(distLocalesDir, { recursive: true, force: true });
+fs.cpSync(sourceLocalesDir, distLocalesDir, { recursive: true });
+
+console.log('Prepared dist release manifest, assets and locales.');
