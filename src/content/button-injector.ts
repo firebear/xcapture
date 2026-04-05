@@ -1,26 +1,83 @@
-const BUTTON_ID = 'xcapture-button';
+const BUTTON_CLASS = 'xcapture-button';
+const INJECTED_ATTR = 'data-xcapture-injected';
 
 export class ButtonInjector {
-  private injectedButtons = new Set<HTMLElement>();
+  private injectedActionBars = new WeakSet<HTMLElement>();
+  private observedTweets = new WeakSet<HTMLElement>();
+  private observers = new WeakMap<HTMLElement, MutationObserver>();
 
   inject(tweet: HTMLElement, onClick: () => void): void {
-    if (this.injectedButtons.has(tweet)) {
+    this.injectIntoTweet(tweet, onClick);
+    this.observeTweet(tweet, onClick);
+  }
+
+  private injectIntoTweet(tweet: HTMLElement, onClick: () => void): void {
+    const actionBars = tweet.querySelectorAll('[role="group"]');
+    if (actionBars.length === 0) {
       return;
     }
 
-    const actionBar = tweet.querySelector('[role="group"]');
-    if (!actionBar) {
+    actionBars.forEach((actionBar) => {
+      if (actionBar instanceof HTMLElement) {
+        this.injectIntoActionBar(actionBar, onClick);
+      }
+    });
+  }
+
+  private injectIntoActionBar(actionBar: HTMLElement, onClick: () => void): void {
+    if (this.injectedActionBars.has(actionBar)) {
+      return;
+    }
+
+    const existingButton = actionBar.querySelector(`[${INJECTED_ATTR}="true"]`);
+    if (existingButton) {
+      this.injectedActionBars.add(actionBar);
       return;
     }
 
     const button = this.createButton(onClick);
     actionBar.appendChild(button);
-    this.injectedButtons.add(tweet);
+    this.injectedActionBars.add(actionBar);
+  }
+
+  private observeTweet(tweet: HTMLElement, onClick: () => void): void {
+    if (this.observedTweets.has(tweet)) {
+      return;
+    }
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (!(node instanceof HTMLElement)) {
+            return;
+          }
+
+          if (node.matches('[role="group"]')) {
+            this.injectIntoActionBar(node, onClick);
+          }
+
+          node.querySelectorAll('[role="group"]').forEach((group) => {
+            if (group instanceof HTMLElement) {
+              this.injectIntoActionBar(group, onClick);
+            }
+          });
+        });
+      });
+    });
+
+    observer.observe(tweet, {
+      childList: true,
+      subtree: true,
+    });
+
+    this.observers.set(tweet, observer);
+    this.observedTweets.add(tweet);
   }
 
   private createButton(onClick: () => void): HTMLElement {
     const button = document.createElement('button');
-    button.id = BUTTON_ID;
+    button.className = BUTTON_CLASS;
+    button.setAttribute(INJECTED_ATTR, 'true');
     button.innerHTML = this.getSVGIcon();
     button.style.cssText = `
       background-color: transparent;

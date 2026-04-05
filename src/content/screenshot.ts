@@ -392,7 +392,6 @@ export class ScreenshotCapture {
     const width = Math.max(
       1,
       Math.ceil(maxRightFromRects),
-      Math.ceil(element.scrollWidth),
       Math.ceil(element.offsetWidth),
       Math.ceil(safeRootWidth)
     );
@@ -409,7 +408,7 @@ export class ScreenshotCapture {
   }
 
   private sanitizeCaptureDimension(value: number, fallback: number, axis: 'width' | 'height'): number {
-    const max = axis === 'width' ? 1200 : 5000;
+    const max = axis === 'width' ? 1200 : 12000;
 
     if (!Number.isFinite(value)) {
       console.warn(`[XCapture] Invalid ${axis} bound ${value}, using fallback ${fallback}`);
